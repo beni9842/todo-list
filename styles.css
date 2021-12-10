@@ -1,0 +1,24 @@
+* {
+    font-family: monospace;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+div {
+    display: flex;
+    border: 1px solid black;
+}
+
+#contents {
+    justify-content: space-evenly;
+}
+
+.section {
+    flex-direction: column;
+    padding: 20px;
+    padding-top: 10px;
+    font-size: 18px;
+}
