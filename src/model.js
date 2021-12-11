@@ -1,100 +1,113 @@
 
-const Todo = (name, desc, date, priority) => {
-    return { name, desc, date, priority };
+const Project = (name) => {
+    return { 
+        name: name,
+        todoList: []
+    };
 }
-const Project = (name, todoList) => {
-    return { name, todoList };
+const Todo = (name, desc, date, priority) => {
+    return {
+        name: name,
+        desc: desc,
+        date, date,
+        priority: priority
+    };
 }
 
-const projectManager = (() => {
-    let projects = [];
+
+const model = (() => {
+
+    function load() {
+        return JSON.parse(localStorage.getItem('projects'));
+    }
+    
+    function save(projects) {
+        localStorage.setItem('projects', JSON.stringify(projects));
+    }    
+
+    const getProjects = () => {
+        const projects = load();
+        if (projects) {
+            return projects;
+        } else {
+            return [];
+        }
+    }
+
+    const addProject = (name) => {
+        if (getProjectIdx(name) == -1) {
+            let projects = getProjects();
+            if (!projects) {
+                projects = [];
+            }
+            projects.push(Project(name));
+            save(projects);
+        }
+    }
+
+    const rmProject = (name) => {
+        let projects = getProjects();
+        projects.splice(getProjectIdx(name), 1);
+        save(projects);
+    }
+
     const getProjectIdx = (name) => {
+        let projects = getProjects();
         for (let i = 0; i < projects.length; i++) {
             if (projects[i].name == name) {
                 return i;
             }
         }
-        console.log(`error: no project with name matching "${name}"`);
         return -1;
     }
+
     const getProject = (name) => {
-        const projectIdx = getProjectIdx(name);
-        if (projectIdx >= 0) {
-            return projects[projectIdx];
-        } else {
+        let projects = getProjects();
+        const index = getProjectIdx(name);
+
+        if (index == -1) {
             return null;
         }
-    }
-    const addProject = (name) => {
-        projects.push(Project(name, []));
-    }
-    const rmProject = (name) => {
-        const projectIdx = getProjectIdx(name);
-        if (projectIdx >= 0) {
-            projects.splice(projectIdx, 1);
+
+        const addTodo = (tdName, tdDesc, tdDate, tdPriority) => {
+            if (getTodoIdx(tdName) == -1) {
+                projects[index].todoList.push(Todo(tdName, tdDesc, tdDate, tdPriority));
+                save(projects);
+            }
         }
-    }
-    const getTodoIdx = (projectName, tdName) => {
-        const projectIdx = getProjectIdx(projectName);
-        if (projectIdx >= 0) {
-            const project = projects[projectIdx];
-            for (let i = 0; i < project.todoList.length; i++) {
-                if (project.todoList[i].name == tdName) {
+
+        const rmTodo = (tdName) => {
+            let todos = getTodos();
+            todos.splice(getTodoIdx(tdName), 1);
+            projects[index].todoList = todos;
+            save(projects);
+        }
+
+        const getTodos = () => {
+            return projects[index].todoList;
+        };
+
+        const getTodoIdx = (tdName) => {
+            const todos = getTodos();
+            for (let i = 0; i < todos.length; i++) {
+                if (todos[i].name == tdName) {
                     return i;
                 }
             }
-            console.log(`error: no todo with name matching "${tdName}"`);
-        }
-        return -1;
-    }
-    const getTodo = (projectName, tdName) => {
-        const todoIdx = getTodoIdx(projectName, tdName);
-        if (todoIdx >= 0) {
-            const projectIdx = getProjectIdx(projectName);
-            return (projects[projectIdx].todoList[todoIdx]);
-        } else {
             return -1;
         }
-    }
-    const addTodo = (projectName, tdName, tdDesc, tdDate, tdPriority) => {
-        const projectIdx = getProjectIdx(projectName);
-        if (projectIdx >= 0) {
-            projects[projectIdx].todoList.push(Todo(tdName, tdDesc, tdDate, tdPriority));
-        }
-    }
-    const rmTodo = (projectName, tdName) => {
-        const projectIdx = getProjectIdx(projectName);
-        if (projectIdx >= 0) {
-            for (let i = 0; i < projects[projectIdx].todoList.length; i++) {
-                if (projects[projectIdx].todoList[i].name == tdName) {
-                    projects[projectIdx].todoList.splice(i, 1);
-                    return;
-                }
-            }
-        }
-    }
-    const save = () => {
-        localStorage.setItem('projects', JSON.stringify(projects));
-    }
-    const load = () => {
-        projects = JSON.parse(localStorage.projects);
-    }
-    const clear = () => {
-        localStorage.removeItem('projects');
+
+
+        return {
+            addTodo: addTodo,
+            rmTodo: rmTodo,
+            getTodos: getTodos,
+            name: projects[index].name
+        };
+
     }
 
-    return {
-        projects,
-        addProject,
-        rmProject,
-        getProject,
-        addTodo,
-        rmTodo,
-        getTodo,
-        save,
-        load,
-        clear
-    }
+    return { getProjects, addProject, rmProject, getProject, save, load }
 })();
 
-export default projectManager;
+export default model;
