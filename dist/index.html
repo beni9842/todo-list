@@ -5,8 +5,9 @@
   <meta charset="utf-8">
   <title>Todo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script defer src="main.js"></script>
+  <script defer src="main.js"></script>  
   <link rel="stylesheet" href="styles.css">
+
 </head>
 
 <body>
@@ -16,7 +17,7 @@
   <div id="contents">
     <div class="section" id="project-manager">
       <h2 id="project-manager-title">Projects</h2>
-      <table class="project-list">
+      <table id="project-list">
         <tr class="project-item">
           <td class="project-name">default project</td>
           <td class="project-open">
@@ -44,22 +45,16 @@
             <button class="project-delete-btn">delete</button>
           </td>
         </tr>
-        <tr class="new-project-item">
-          <form class="new-project-form">
-            <td class="new-project-name">
-              <input type="text" name="new-project-name" class="new-project-name-input" value="project name">
-            </td>
-            <td class="new-project-submit">
-              <input type="submit" name="new-project-submit" class="new-project-submit-btn">
-            </td>
-          </form>
-        </tr>
       </table>
+      <form id="new-project-form">
+        <input type="text" name="new-project-name" class="new-project-name-input" value="project name" required>
+        <input type="submit" name="submit" value="add" required>
+      </form>
     </div>
 
     <div class="section" id="project-display">
       <h2 id="project-display-title">default project</h2>
-      <table class="todo-list">
+      <table id="todo-list">
         <tr class="todo-item">
           <td class="todo-name">todo 1</td>
           <td class="todo-desc">a lot of stuff to do!</td>
@@ -89,29 +84,16 @@
           <td class="todo-desc">a lot of stuff to do!</td>
           <td class="todo-date">01/01/2022</td>
           <td class="todo-priority">3</td>
-          <td class="todo-edit-btn"><button class="todo-edit-btn">edit</button></td>
           <td class="todo-delete-btn"><button class="todo-delete-btn">delete</button></td>
         </tr>
-        <tr class="new-todo-item">
-          <form class="new-todo-form">
-            <td class="new-todo-name">
-              <input type="text" name="new-todo-name" class="new-todo-name-input" value="name">
-            </td>
-            <td class="new-todo-desc">
-              <input type="text" name="new-todo-desc" class="new-todo-desc-input" value="description">
-            </td>
-            <td class="new-todo-date">
-              <input type="date" name="new-todo-date" class="new-todo-date-input">
-            </td>
-            <td class="new-todo-priority">
-              <input type="number" name="new-todo-priority" class="new-todo-priority-input">
-            </td>
-            <td class="new-todo-submit">
-              <input type="submit" name="new-todo-submit" class="new-todo-submit-btn">
-            </td>
-          </form>
-        </tr>
       </table>
+        <form id="new-todo-form">
+            <input type="text" name="new-todo-name" class="new-todo-name-input" value="name" required>
+            <input type="text" name="new-todo-desc" class="new-todo-desc-input" value="description" required>
+            <input type="date" name="new-todo-date" class="new-todo-date-input" required>
+            <input type="number" name="new-todo-priority" class="new-todo-priority-input" value="1" required>
+            <input type="submit" name="new-todo-submit" class="new-todo-submit-btn" value="add" required>
+        </form>          
     </div>
   </div>
 </body>
